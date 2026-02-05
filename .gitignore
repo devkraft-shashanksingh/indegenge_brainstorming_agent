@@ -1,0 +1,37 @@
+# --- Backend ---
+backend/venv/
+backend/.env
+backend/**/__pycache__/
+backend/**/*.db
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/dist/
+backend/build/
+backend/*.egg-info/
+
+# --- Frontend ---
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env*.local
+frontend/.turbo/
+frontend/.vercel
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# --- Shared / OS ---
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# --- Root Environment ---
+.env
+.env.local
+node_modules/
+venv/
+env/
