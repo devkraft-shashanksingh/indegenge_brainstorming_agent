@@ -8,6 +8,7 @@ import asyncio
 import json
 from pathlib import Path
 from datetime import datetime
+from contextlib import asynccontextmanager
 
 # Database imports
 from sqlalchemy.orm import Session
@@ -22,10 +23,26 @@ from data_library.challenge_generator import (
     rewrite_statement_with_ai
 )
 
-# Create Tables
-Base.metadata.create_all(bind=engine)
+# Create Tables - Moved to lifespan to avoid import-time errors
+# Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Challenge Statement Generator API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Create tables
+    try:
+        print("Creating database tables...")
+        Base.metadata.create_all(bind=engine)
+        print("Database tables created successfully.")
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
+        # We don't raise here so the app can still start and return health check
+    
+    yield
+    
+    # Shutdown logic if needed
+    print("Shutting down...")
+
+app = FastAPI(title="Challenge Statement Generator API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
